@@ -50,19 +50,22 @@ A aplicação utiliza o PostgreSQL para persistência dos dados. O GORM (ORM uti
 
 1. Subindo o Banco de Dados com Docker (Recomendado)
 Caso tenha o Docker instalado, você pode iniciar o PostgreSQL rapidamente executando na raiz do projeto:
-docker compose up -d
+   ```bash
+   docker compose up -d
+
 Isso iniciará um container PostgreSQL (form_builder_db) na porta 5432 utilizando as seguintes credenciais padrão:
 Usuário: postgres
 Senha: postgres
 Banco de Dados: form_builder
 
-2. Banco Local Criado Manualmente
+3. Banco Local Criado Manualmente
 Caso prefira utilizar uma instalação nativa do PostgreSQL em sua máquina:
 Acesse o seu cliente de banco de dados preferido (pgAdmin, DBeaver, psql, etc.).
 Crie um novo banco de dados vazio (ex: form_builder).
 Configure a string de conexão (DSN) através da variável de ambiente DB_DSN antes de iniciar o backend.
 Exemplo de configuração (Linux/macOS):
-export DB_DSN="host=localhost user=postgres password=postgres dbname=form_builder port=5432 sslmode=disable"
+   ```bash
+   export DB_DSN="host=localhost user=postgres password=postgres dbname=form_builder port=5432 sslmode=disable"
 (No Windows/PowerShell, utilize $env:DB_DSN="...")
 
 ### 3. Configuração e Execução do Backend
@@ -72,7 +75,8 @@ export DB_DSN="host=localhost user=postgres password=postgres dbname=form_builde
 
 3. Configure a string de conexão do banco de dados (via variável de ambiente ou arquivo de configuração conforme suportado pelo seu serviço). 
 Exemplo:
-export DB_DSN="host=localhost user=postgres password=postgres dbname=form_builder port=5432 sslmode=disable"
+   ```bash
+   export DB_DSN="host=localhost user=postgres password=postgres dbname=form_builder port=5432 sslmode=disable"
 
 4. Execute o servidor Go:
 go run cmd/server/main.go run
@@ -80,13 +84,16 @@ O servidor da API iniciará escutando na porta configurada (ex: http://localhost
 
 ### 4. Configuração e Execução do Frontend
 1. Acesse a pasta do frontend:
-cd frontend
+   ```bash
+   cd frontend
 
 2. Instale as dependências:
-npm install
+   ```bash
+   npm install
 
 3. Inicie o servidor de desenvolvimento:
-npm run dev
+   ```bash
+   npm run dev
 A aplicação web estará acessível em http://localhost:5173
 
 ### 5. Pipeline de Especificação OpenAPI e Geração de Client TypeScript
@@ -94,12 +101,14 @@ Em conformidade com as diretrizes do desafio, a aplicação garante que o contra
 
 1. Gerar a especificação Swagger no Backend:
 No diretório do backend, utilize a ferramenta Swaggo para escanear os metadados dos handlers e gerar a especificação JSON:
-swag init -g cmd/server/main.go --parseDependency --parseInternal
+   ```bash
+   swag init -g cmd/server/main.go --parseDependency --parseInternal
 (Atualiza o arquivo swagger.json dentro da pasta de documentação do backend).
 
 2. Gerar o Client TypeScript no Frontend:
 No diretório do frontend, execute o script configurado para ler a spec gerada e atualizar as tipagens e métodos de requisição:
-npm run generate-client
+   ```bash
+   npm run generate-client
 (Atualiza os arquivos seguros de tipagem e comunicação em src/api-client).
 
 ## Regras de Negócio e Funcionalidades Implementadas
