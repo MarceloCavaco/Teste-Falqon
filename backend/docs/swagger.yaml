@@ -1,0 +1,477 @@
+basePath: /
+definitions:
+  backend_internal_model.AuthResponse:
+    properties:
+      token:
+        example: mock-jwt-token
+        type: string
+    type: object
+  backend_internal_model.Form:
+    properties:
+      createdAt:
+        type: string
+      description:
+        type: string
+      fields:
+        items:
+          $ref: '#/definitions/backend_internal_model.FormField'
+        type: array
+      id:
+        type: string
+      published:
+        type: boolean
+      responses:
+        items:
+          $ref: '#/definitions/backend_internal_model.FormResponse'
+        type: array
+      slug:
+        type: string
+      title:
+        type: string
+      updatedAt:
+        type: string
+      userId:
+        type: string
+    type: object
+  backend_internal_model.FormField:
+    properties:
+      createdAt:
+        type: string
+      fieldType:
+        type: string
+      formId:
+        type: string
+      id:
+        type: string
+      label:
+        type: string
+      options:
+        description: '@swaggertype object'
+        items:
+          type: integer
+        type: array
+      orderIndex:
+        type: integer
+      required:
+        type: boolean
+      updatedAt:
+        type: string
+    type: object
+  backend_internal_model.FormResponse:
+    properties:
+      answers:
+        description: '@swaggertype object'
+        items:
+          type: integer
+        type: array
+      formId:
+        type: string
+      id:
+        type: string
+      submittedAt:
+        type: string
+    type: object
+  backend_internal_model.FormSummary:
+    properties:
+      createdAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      publicUrl:
+        type: string
+      published:
+        type: boolean
+      responsesCount:
+        type: integer
+      title:
+        type: string
+    type: object
+  backend_internal_model.LoginRequest:
+    properties:
+      email:
+        example: user@example.com
+        type: string
+      password:
+        example: "123456"
+        type: string
+    type: object
+  internal_handler.CreateFormRequest:
+    properties:
+      description:
+        type: string
+      fields:
+        items:
+          $ref: '#/definitions/backend_internal_model.FormField'
+        type: array
+      published:
+        type: boolean
+      slug:
+        type: string
+      title:
+        type: string
+      userId:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: API para gerenciamento de formulários e autenticação OAuth2.
+  title: API Form Engine & Auth
+  version: "1.0"
+paths:
+  /api/admin/forms:
+    get:
+      operationId: getApiAdminForms
+      parameters:
+      - description: Exibir excluídos
+        in: query
+        name: deleted
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/backend_internal_model.FormSummary'
+            type: array
+        "500":
+          description: Erro ao buscar formulários
+          schema:
+            type: string
+      summary: Listar Formulários
+      tags:
+      - Admin
+  /api/admin/forms/{id}/publish:
+    patch:
+      consumes:
+      - application/json
+      operationId: patchApiFormsPublish
+      parameters:
+      - description: ID do Formulário
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: 'Payload contendo {published: bool}'
+        in: body
+        name: request
+        required: true
+        schema:
+          additionalProperties:
+            type: boolean
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Alternar Publicação
+      tags:
+      - Admin
+  /api/forms:
+    post:
+      consumes:
+      - application/json
+      description: Cria um novo formulário com os campos especificados
+      operationId: postApiForms
+      parameters:
+      - description: Dados de criação do formulário
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_handler.CreateFormRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/backend_internal_model.Form'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Criar formulário
+      tags:
+      - Forms
+  /api/forms/{id}:
+    delete:
+      description: Remove o formulário e suas dependências pelo ID
+      operationId: deleteApiFormsId
+      parameters:
+      - description: ID do Formulário
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Erro ao excluir formulário
+          schema:
+            type: string
+      summary: Excluir Formulário
+      tags:
+      - Forms
+    get:
+      description: Retorna a estrutura completa do formulário e seus campos para edição
+      operationId: getApiFormsId
+      parameters:
+      - description: ID do Formulário
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend_internal_model.Form'
+        "404":
+          description: Formulário não encontrado
+          schema:
+            type: string
+      summary: Buscar Formulário por ID
+      tags:
+      - Forms
+    put:
+      consumes:
+      - application/json
+      description: Atualiza título, descrição, slug e reescreve os campos do formulário
+      operationId: putApiFormsId
+      parameters:
+      - description: ID do Formulário
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Dados atualizados do formulário
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_handler.CreateFormRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Payload inválido
+          schema:
+            type: string
+        "500":
+          description: Erro ao atualizar formulário
+          schema:
+            type: string
+      summary: Atualizar Formulário
+      tags:
+      - Forms
+  /api/forms/{id}/responses:
+    get:
+      operationId: getApiFormsResponses
+      parameters:
+      - description: ID do Formulário (UUID)
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/backend_internal_model.FormResponse'
+            type: array
+        "500":
+          description: Erro ao buscar respostas
+          schema:
+            type: string
+      summary: Listar Respostas do Formulário
+      tags:
+      - Forms
+  /api/forms/{id}/restore:
+    patch:
+      operationId: restoreApiFormsId
+      parameters:
+      - description: ID do Formulário
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Erro ao restaurar formulário
+          schema:
+            type: string
+      summary: Restaurar Formulário
+      tags:
+      - Admin
+  /api/health:
+    get:
+      description: Retorna OK se a aplicação estiver respondendo
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Health Check
+      tags:
+      - System
+  /auth/google:
+    get:
+      description: Inicia o fluxo de autenticação OAuth2 gerando o cookie de estado
+      responses:
+        "307":
+          description: Temporary Redirect
+      summary: Login com Google
+      tags:
+      - Auth
+  /auth/google/callback:
+    get:
+      description: Processa o retorno do OAuth2, valida o estado via Cookie e redireciona
+        ao Frontend
+      responses:
+        "302":
+          description: Found
+        "400":
+          description: Estado inválido ou Cookie ausente
+          schema:
+            type: string
+        "500":
+          description: Falha na troca de código pelo token
+          schema:
+            type: string
+      summary: Callback do Google OAuth2
+      tags:
+      - Auth
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Realiza autenticação simples e retorna um JWT fictício
+      parameters:
+      - description: Credenciais do usuário
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/backend_internal_model.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend_internal_model.AuthResponse'
+        "400":
+          description: Dados inválidos
+          schema:
+            type: string
+      summary: Login com Email e Senha
+      tags:
+      - Auth
+  /f/{slug}:
+    get:
+      description: Retorna o formulário e seus campos visíveis usando o slug único
+      operationId: getPublicFormBySlug
+      parameters:
+      - description: Slug do formulário
+        in: path
+        name: slug
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend_internal_model.Form'
+        "404":
+          description: Formulário não encontrado ou inativo
+          schema:
+            type: string
+      summary: Buscar Formulário Público
+      tags:
+      - Public
+  /f/{slug}/submit:
+    post:
+      consumes:
+      - application/json
+      description: Recebe um objeto JSON com os pares de pergunta/resposta e persiste
+        no banco
+      operationId: submitPublicForm
+      parameters:
+      - description: Slug do formulário
+        in: path
+        name: slug
+        required: true
+        type: string
+      - description: Objeto JSON contendo as respostas
+        in: body
+        name: request
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Payload de resposta inválido
+          schema:
+            type: string
+        "404":
+          description: Formulário não encontrado
+          schema:
+            type: string
+        "500":
+          description: Erro ao salvar resposta no banco
+          schema:
+            type: string
+      summary: Submeter Resposta de Formulário
+      tags:
+      - Public
+swagger: "2.0"
