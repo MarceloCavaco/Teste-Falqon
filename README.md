@@ -13,7 +13,7 @@ O projeto segue padrões estritos de separação de responsabilidades (Clean Arc
   * `internal/model`: Definições de entidades de banco de dados e migrações automáticas.
   * `internal/repository`: Camada de acesso a dados (abstração de queries e transações).
   * `internal/handler`: Controladores HTTP, regras de validação de submissões e anotações do Swagger.
-* **`frontend/`**: Desenvolvido em **React** e **TypeScript** empacotado via **Vite**, utilizando **Material-UI (MUI)** para componentes visuais[cite: 6], **React Router** para roteamento e **TanStack React Query** para gerenciamento de estado remoto assíncrono[cite: 6].
+* **`frontend/`**: Desenvolvido em **React** e **TypeScript** empacotado via **Vite**, utilizando **Material-UI (MUI)** para componentes visuais, **React Router** para roteamento e **TanStack React Query** para gerenciamento de estado remoto assíncrono.
 
 ---
 
@@ -79,8 +79,10 @@ Exemplo:
    export DB_DSN="host=localhost user=postgres password=postgres dbname=form_builder port=5432 sslmode=disable"
 
 4. Execute o servidor Go:
-go run cmd/server/main.go run
-O servidor da API iniciará escutando na porta configurada (ex: http://localhost:8080). As migrations do banco de dados (tabelas de usuários, formulários, campos e respostas) são executadas automaticamente pelo GORM ao iniciar.
+   ```bash
+   go run cmd/server/main.go run
+O servidor da API iniciará escutando na porta configurada (ex: http://localhost:8080). 
+As migrations do banco de dados (tabelas de usuários, formulários, campos e respostas) são executadas automaticamente pelo GORM ao iniciar.
 
 ### 4. Configuração e Execução do Frontend
 1. Acesse a pasta do frontend:
@@ -114,7 +116,7 @@ No diretório do frontend, execute o script configurado para ler a spec gerada e
 ## Regras de Negócio e Funcionalidades Implementadas
 Form Builder Dinâmico: O administrador cria formulários estruturados contendo múltiplos tipos de campos (texto, opções, numéricos) e define quais campos são obrigatórios (required: true).
 
-Publicação via Slug: Cada formulário possui uma flag de publicação e uma URL pública amigável (/f/{slug}) acessível por qualquer visitante sem necessidade de autenticação[cite: 6].
+Publicação via Slug: Cada formulário possui uma flag de publicação e uma URL pública amigável (/f/{slug}) acessível por qualquer visitante sem necessidade de autenticação.
 
 Validação Rigorosa no Backend: Submissões realizadas por usuários externos passam por uma validação automatizada na API que cruza os dados enviados com a modelagem do formulário, bloqueando submissões com falhas em campos obrigatórios (400 Bad Request).
 
