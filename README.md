@@ -67,13 +67,14 @@ export DB_DSN="host=localhost user=postgres password=postgres dbname=form_builde
 
 ### 3. Configuração e Execução do Backend
 1. Navegue até a pasta do backend:
+   ```bash
    cd backend
 
-2. Configure a string de conexão do banco de dados (via variável de ambiente ou arquivo de configuração conforme suportado pelo seu serviço). 
+3. Configure a string de conexão do banco de dados (via variável de ambiente ou arquivo de configuração conforme suportado pelo seu serviço). 
 Exemplo:
 export DB_DSN="host=localhost user=postgres password=postgres dbname=form_builder port=5432 sslmode=disable"
 
-3. Execute o servidor Go:
+4. Execute o servidor Go:
 go run cmd/server/main.go run
 O servidor da API iniciará escutando na porta configurada (ex: http://localhost:8080). As migrations do banco de dados (tabelas de usuários, formulários, campos e respostas) são executadas automaticamente pelo GORM ao iniciar.
 
