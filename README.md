@@ -114,13 +114,13 @@ No diretório do frontend, execute o script configurado para ler a spec gerada e
 (Atualiza os arquivos seguros de tipagem e comunicação em src/api-client).
 
 ## Regras de Negócio e Funcionalidades Implementadas
-Form Builder Dinâmico: O administrador cria formulários estruturados contendo múltiplos tipos de campos (texto, opções, numéricos) e define quais campos são obrigatórios (required: true).
+1. Form Builder Dinâmico: O administrador cria formulários estruturados contendo múltiplos tipos de campos (texto, opções, numéricos) e define quais campos são obrigatórios (required: true).
 
-Publicação via Slug: Cada formulário possui uma flag de publicação e uma URL pública amigável (/f/{slug}) acessível por qualquer visitante sem necessidade de autenticação.
+2. Publicação via Slug: Cada formulário possui uma flag de publicação e uma URL pública amigável (/f/{slug}) acessível por qualquer visitante sem necessidade de autenticação.
 
-Validação Rigorosa no Backend: Submissões realizadas por usuários externos passam por uma validação automatizada na API que cruza os dados enviados com a modelagem do formulário, bloqueando submissões com falhas em campos obrigatórios (400 Bad Request).
+3. Validação Rigorosa no Backend: Submissões realizadas por usuários externos passam por uma validação automatizada na API que cruza os dados enviados com a modelagem do formulário, bloqueando submissões com falhas em campos obrigatórios (400 Bad Request).
 
-Auditoria e Gestão de Respostas: O painel administrativo permite a listagem de formulários ativos/excluídos (com suporte a Soft Delete e restauração lógica) e a visualização detalhada das respostas coletadas.
+4. Auditoria e Gestão de Respostas: O painel administrativo permite a listagem de formulários ativos/excluídos (com suporte a Soft Delete e restauração lógica) e a visualização detalhada das respostas coletadas.
 
 ## Funcionalidades Adicionais & Diferenciais de UX/UI
 Além de atender aos requisitos essenciais do desafio, a aplicação foi concebida com um olhar atento à experiência do usuário (*UX*), à segurança operacional e à robustez de dados:
@@ -140,6 +140,6 @@ Nota de transparência técnica alinhada às premissas do teste:
 
 1. Autenticação e Gestão de Sessão (Abstração por Restrição de Prazo):
 
-Decisão: Optou-se por concentrar os esforços de engenharia na robustez do ecossistema central do Form Builder (modelagem relacional com GORM, integridade de campos obrigatórios, rotas públicas isoladas, soft delete/restore e geração automatizada de contratos OpenAPI/Client TypeScript). A camada de múltiplos provedores de identidade (Google OAuth e login por e-mail/senha) foi temporariamente abstraída por meio de um contexto de usuário fixado no backend.
+Decisão: Devido a problemas técnicos, optei por concentrar os esforços de engenharia na robustez do ecossistema central do Form Builder (modelagem relacional com GORM, integridade de campos obrigatórios, rotas públicas isoladas, soft delete/restore e geração automatizada de contratos OpenAPI/Client TypeScript). A camada de múltiplos provedores de identidade (Google OAuth e login por e-mail/senha) foi temporariamente abstraída por meio de um contexto de usuário fixado no backend.
 
 Justificativa: Essa escolha estratégica garantiu a entrega de um software 100% funcional, estável e testável em seus fluxos críticos de ponta a ponta, evitando componentes de autenticação parciais ou inseguros decorrentes de limitações temporais do escopo.
