@@ -1,0 +1,9 @@
+# Dependências e Builds
+node_modules/
+dist/
+build/
+*.exe
+
+# Variáveis de ambiente e segredos
+.env
+backend/.env
